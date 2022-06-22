@@ -47,16 +47,17 @@ for imgno = 1:length(imgs)
         end
         img = imresize(img,[224 224]);
 
-        %% Step1£º construct the Colour Contextual Extractor (CCE) Module
+        %% Step1： construct the Colour Contextual Extractor (CCE) Module
         [ccv,ccv_refined] = myColorChannelVolume(img); %% build the Colour Channel Volume (CCV)
-        [ccv_salmap,salmap,ccv_w,Sw,S] = CAM(img,ccv, param); %% build the Colour Activation Mapping (CAM)
+        [CAM_result,salmap,ccv_w,Sw,S] = CAM(img,ccv, param); %% build the Colour Activation Mapping (CAM)
         %% proudce the final saliency map
-        salMap = (double(ccv_refined) + double(ccv_salmap)+double(salmap))/3;
-        %salMap = my_img_refined(salMap); 
-        salMap =AT_main(salMap); 
-        %% Step2: build the Adaptive Threshold (AT) Strategy for Image Segmentation
-        AT_rest = my_img_refined_graythresh(salMap);
+        %salMap = (double(ccv_refined) + double(ccv_salmap)+double(salmap))/3;
+        salMap = my_img_refined(CAM_result); 
         
+        %% Step2: build the Adaptive Threshold (AT) Strategy for Image Segmentation
+        %AT_rest = my_img_refined_graythresh(salMap);
+        AT_rest = AT_main(salMap);
+
         imwrite(AT_rest, [rstPath, imgname, '.png']);
         
         % 		t2 = clock;
