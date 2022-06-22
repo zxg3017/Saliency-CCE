@@ -1,4 +1,4 @@
-function seg_result=MHT_main(IMG)
+function seg_result=AT_main(IMG)
 %% find the peaks and thresholds (valleys) of histogram from a grayscale image
 % Code Author: Xiaogen Zhou
 % Email: xiaogenzhou@126.com
