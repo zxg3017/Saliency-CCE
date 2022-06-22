@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % This code implements the proposed method: Saliency-CCE: Exploiting Colour
-% Contextual Extractor and Saliency-based Skin Lesion Segmentation
+% Contextual Extractor and Saliency-based Biomedical Image Segmentation
 %
 % Project page: https://github.com/zxg2017/Saliency-CCE
 %
