@@ -38,19 +38,19 @@ if len<1
 end
 len=length(PEAKS);
 if len>=4
-    %-------------------¡¾find the first valley¡¿------------------------
+    %-------------------Â¡Â¾find the first valleyÂ¡Â¿------------------------
     freq_map=imh(PEAKS(1):PEAKS(2)); % the frequency between PEAKS(1) and PEAKS(2)
     ind_map=imh_ind(PEAKS(1):PEAKS(2)); % the grayscale value between PEAKS(1) and PEAKS(2)
     V_first=min(imh(PEAKS(1):PEAKS(2))); % the lowest frequency between PEAKS(1) and PEAKS(2)
     V_first_grayscale=ind_map(find(freq_map==V_first,1))-1;% the grayscale value of the first valley
     
-    %-------------------¡¾find the second valley¡¿------------------------
+    %-------------------Â¡Â¾find the second valleyÂ¡Â¿------------------------
     freq_map=imh(PEAKS(2):PEAKS(3)); % the frequency between PEAKS(1) and PEAKS(2)
     ind_map=imh_ind(PEAKS(2):PEAKS(3)); % the grayscale value between PEAKS(1) and PEAKS(2)
     V_second=min(imh(PEAKS(2):PEAKS(3))); % the lowest frequency between PEAKS(1) and PEAKS(2)
     V_second_grayscale=ind_map(find(freq_map==V_second,1))-1;% the grayscale value of the first valley
     
-    %-------------------¡¾find the last valley¡¿------------------------
+    %-------------------Â¡Â¾find the last valleyÂ¡Â¿------------------------
     freq_map=imh(PEAKS(len-1):PEAKS(len)); % the frequency between PEAKS(1) and PEAKS(2)
     ind_map=imh_ind(PEAKS(len-1):PEAKS(len)); % the grayscale value between PEAKS(2) and PEAKS(3)
     V_last=min(imh(PEAKS(len-1):PEAKS(len))); % the lowest frequency between PEAKS(2) and PEAKS(3)
@@ -58,25 +58,27 @@ if len>=4
     
 elseif len==3
     
-    %-------------------¡¾find the first valley¡¿------------------------
+    %-------------------Â¡Â¾find the first valleyÂ¡Â¿------------------------
     freq_map=imh(PEAKS(1):PEAKS(2)); % the frequency between PEAKS(1) and PEAKS(2)
     ind_map=imh_ind(PEAKS(1):PEAKS(2)); % the grayscale value between PEAKS(1) and PEAKS(2)
     V_first=min(imh(PEAKS(1):PEAKS(2))); % the lowest frequency between PEAKS(1) and PEAKS(2)
     V_first_grayscale=ind_map(find(freq_map==V_first,1))-1;% the grayscale value of the first valley
-    %-------------------¡¾find the last valley¡¿------------------------
+    %-------------------Â¡Â¾find the last valleyÂ¡Â¿------------------------
     freq_map=imh(PEAKS(2):PEAKS(3)); % the frequency between PEAKS(1) and PEAKS(2)
     ind_map=imh_ind(PEAKS(2):PEAKS(3)); % the grayscale value between PEAKS(2) and PEAKS(3)
     V_last=min(imh(PEAKS(2):PEAKS(3))); % the lowest frequency between PEAKS(2) and PEAKS(3)
     V_last_grayscale=ind_map(find(freq_map==V_last,1))-1;% the grayscale value of the last valley
 elseif len==2
-    %-------------------¡¾find the first or last valley¡¿------------------------
+    %-------------------Â¡Â¾find the first or last valleyÂ¡Â¿------------------------
     freq_map=imh(PEAKS(1):PEAKS(2)); % the frequency between PEAKS(1) and PEAKS(2)
     ind_map=imh_ind(PEAKS(1):PEAKS(2)); % the grayscale value between PEAKS(1) and PEAKS(2)
     V_freq=min(imh(PEAKS(1):PEAKS(2))); % the lowest frequency between PEAKS(1) and PEAKS(2)
     V_first_grayscale=ind_map(find(freq_map==V_freq,1))-1;% the grayscale value of the first valley
     V_last_grayscale=ind_map(find(freq_map==V_freq,1))-1;% the grayscale value of the first valley
 elseif len==1
-    V_last_grayscale=PEAKS(1);
+    %V_last_grayscale=PEAKS(1);
+    V_last_grayscale=graythresh(IMG)
+    
 else
     warning([' Results may not be accurate.' 'Please recfication you code : ' ]);
 end
