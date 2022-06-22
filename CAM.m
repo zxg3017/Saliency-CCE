@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % This code implements the proposed method: Saliency-CCE: Exploiting Colour
-% Contextual Extractor and Saliency-based Skin Lesion Segmentation
+% Contextual Extractor and Saliency-based Biomedical Image Segmentation
 %
 % Project page: https://github.com/zxg2017/Saliency-CCE
 %
@@ -13,7 +13,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-function [csv_salmap,salmap,csv_w,Sw,S] = CAM(img,csv, param)
+function [CAM_result,salmap,csv_w,Sw,S] = CAM(img,csv, param)
 param.ColorName = {
 	1,  'Black',  [0    0    0];
 	2,  'Blue',	  [0    0    1];
@@ -51,6 +51,7 @@ S = imresize(S, [size(img,1), size(img,2)]);
 csv_w = imresize(csv_w, [size(img,1), size(img,2)]);
 Sw = imresize(Sw, [size(img,1), size(img,2)]);
 
+CAM_result = salmap.*csv_w  % eq.(6)
 
 end
 
