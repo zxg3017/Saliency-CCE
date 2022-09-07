@@ -1,10 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % This code implements the proposed method: Saliency-CCE: Exploiting Colour
-% Contextual Extractor and Saliency-based Biomedical Image Segmentation
+% Contextual Extractor and Saliency-based Skin Lesion Segmentation
 %
 % Project page: https://github.com/zxg2017/Saliency-CCE
-%
+% References：
+% [5] Jing Lou*, Huan Wang, Longtao Chen, Fenglei Xu, Qingyuan Xia, Wei Zhu, Mingwu Ren*, 
+% "Exploiting Color Name Space for Salient Object Detection," Multimedia Tools and Applications,  vol. 79, no. 15, pp. 10873-10897, 2020. doi:10.1007/s11042-019-07970-x
 %
 % Copyright (C) 2022 Xiaogen Zhou 
 %
@@ -48,10 +50,10 @@ salmap = imresize(salmap, [size(img,1), size(img,2)]);
 salmap = im2uint8(mat2gray(salmap));
 
 S = imresize(S, [size(img,1), size(img,2)]);
-csv_w = imresize(csv_w, [size(img,1), size(img,2)]);
+csv_w = imresize(csv, [size(img,1), size(img,2)]);
 Sw = imresize(Sw, [size(img,1), size(img,2)]);
 
-CAM_result = salmap.*csv_w  % eq.(6)
+CAM_result = salmap.*csv_w;  % eq.(6)
 
 end
 
