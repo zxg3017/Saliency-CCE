@@ -4,7 +4,7 @@
 % Contextual Extractor and Saliency-based Biomedical Image Segmentation
 %
 % Project page: https://github.com/zxg2017/Saliency-CCE
-%
+% 
 %
 % Copyright (C) 2022 Xiaogen Zhou 
 %
@@ -26,15 +26,15 @@ param.omega_r      = 14;
 param.theta_r	   = 0.02;
 param.theta_g	   = 1.5;
 
-imgPath = '/mnt/ai2019/zxg_FZU/dataset/skin_lesion_data/seg/train/Images/';
+imgPath = '/mnt/ai2019/zxg_FZU/github_code/Saliency-CCE/test_image/';
 
-rstPath = '/mnt/ai2019/zxg_FZU/dataset/skin_lesion_data/cce-net/train/my_graythresh/';
+rstPath = '/mnt/ai2019/zxg_FZU/github_code/Saliency-CCE/result/';
 
 %% Read Images
-imgJPG = dir([imgPath, '*.jpg']);
+imgJPG = dir([imgPath, '*.png']);
 imgs   = [imgJPG,];
 
-
+N = 224;% N is a parameter, which is can adapt for [112, 224, 448 ...]
 %% Saliency-CCE
 for imgno = 1:length(imgs)
     imgname = imgs(imgno).name;
@@ -45,7 +45,7 @@ for imgno = 1:length(imgs)
         if length(size(img)) == 2
             img= cat(3,img,img,img);
         end
-        img = imresize(img,[224 224]);
+        img = imresize(img,[N N]);
 
         %% Step1： construct the Colour Contextual Extractor (CCE) Module
         [ccv,ccv_refined] = myColorChannelVolume(img); %% build the Colour Channel Volume (CCV)
@@ -57,6 +57,8 @@ for imgno = 1:length(imgs)
         %% Step2: build the Adaptive Threshold (AT) Strategy for Image Segmentation
         %AT_rest = my_img_refined_graythresh(salMap);
         AT_rest = AT_main(salMap);
+        
+        imwrite(salMap, [rstPath, imgname, '_sal.png']);
 
         imwrite(AT_rest, [rstPath, imgname, '.png']);
         
