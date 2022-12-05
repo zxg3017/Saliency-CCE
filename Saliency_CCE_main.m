@@ -11,7 +11,7 @@
 % The usage of this code is restricted for non-profit research usage only and using of the code is at the user's risk.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+addpath '/mnt/ai2019/zxg_FZU/matlab_project/Saliency-CCE/hair-removal'
 
 clc; clear; close all;
 addpath(genpath('Funcs'));
@@ -26,12 +26,15 @@ param.omega_r      = 14;
 param.theta_r	   = 0.02;
 param.theta_g	   = 1.5;
 
-imgPath = '/mnt/ai2019/zxg_FZU/github_code/Saliency-CCE/test_image/';
-
-rstPath = '/mnt/ai2019/zxg_FZU/github_code/Saliency-CCE/result/';
+%imgPath = '/mnt/ai2021/zxg/dataset/ISIB_2016/test/image/';
+imgPath = '/mnt/ai2021/zxg/dataset/ISIB_2016/with_hair/img/';
+rstPath = '/mnt/ai2021/zxg/dataset/ISIB_2016/test/seg_result_with_hair_remove/';
+salMap_rstPath = '/mnt/ai2021/zxg/dataset/ISIB_2016/test/seg_result_with_hair_remove_sal/';
+hair_remove_path='/mnt/ai2021/zxg/dataset/ISIB_2016/test/ISIB2017/without_hair_remove/';
+CAM_path='/mnt/ai2021/zxg/dataset/ISIB_2016/with_hair/matt/';
 
 %% Read Images
-imgJPG = dir([imgPath, '*.png']);
+imgJPG = dir([imgPath, '*.jpg']);
 imgs   = [imgJPG,];
 
 N = 224;% N is a parameter, which is can adapt for [112, 224, 448 ...]
@@ -46,21 +49,30 @@ for imgno = 1:length(imgs)
             img= cat(3,img,img,img);
         end
         img = imresize(img,[N N]);
+        
+        %% hair remove
+        [hair_remov_result,M,K]=hair_remover_main(img);
+        %imwrite(hair_remov_result, [hair_remove_path, imgname, '.png']);
 
         %% Step1： construct the Colour Contextual Extractor (CCE) Module
-        [ccv,ccv_refined] = myColorChannelVolume(img); %% build the Colour Channel Volume (CCV)
-        [CAM_result,salmap,ccv_w,Sw,S] = CAM(img,ccv, param); %% build the Colour Activation Mapping (CAM)
-        %% proudce the final saliency map
-        %salMap = (double(ccv_refined) + double(ccv_salmap)+double(salmap))/3;
-        salMap = my_img_refined(CAM_result); 
+        [ccv,ccv_refined] = myColorChannelVolume(hair_remov_result); %% build the Colour Channel Volume (CCV)
+%         imwrite(ccv, [CCV_path, imgname, '.png']);
+
+        [CAM_result,salmap,ccv_w,Sw,S] = CAM(hair_remov_result,ccv, param); %% build the Colour Activation Mapping (CAM)
         
+        
+        %% proudce the final saliency map
+        salMap = (double(ccv_refined) +double(salmap))/2 + double(CAM_result);
+        salMap = my_img_refined(salMap); 
+        imwrite(salMap, [CAM_path, imgname, '.png']);
+
         %% Step2: build the Adaptive Threshold (AT) Strategy for Image Segmentation
-        %AT_rest = my_img_refined_graythresh(salMap);
+%         AT_rest = my_img_refined_graythresh(salMap);
         AT_rest = AT_main(salMap);
         
-        imwrite(salMap, [rstPath, imgname, '_sal.png']);
-
-        imwrite(AT_rest, [rstPath, imgname, '.png']);
+%         imwrite(salMap, [salMap_rstPath, imgname, '_sal.png']);
+% 
+%         imwrite(AT_rest, [hair_remove_path, imgname, '.png']);
         
         % 		t2 = clock;
         % 		fprintf('(Time: %fs)\n', etime(t2,t1));
